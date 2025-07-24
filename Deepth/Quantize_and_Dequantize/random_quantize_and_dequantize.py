@@ -29,7 +29,7 @@ def linear_dequantize_with_scale_and_zero_point(
         scale,
         zero_point,
 ):
-    return scale * (tensor - zero_point)
+    return scale * (tensor.float() - zero_point)
 
 if __name__ == "__main__":
     test_tensor=torch.tensor(
@@ -53,6 +53,10 @@ if __name__ == "__main__":
         zero_point=zero_point,
     )
     print(f"Dequantized tensor:\n{dequantized_tensor}")
+
+    print(f"Quantization error:\n{test_tensor - dequantized_tensor}")
+    print(f"Quantization error square:\n{(dequantized_tensor - test_tensor).square()}")
+    print(f"Quantization error square mean:\n{(dequantized_tensor - test_tensor).square().mean()}")
 
     plot_quantization_errors(test_tensor, quantized_tensor,
                          dequantized_tensor)

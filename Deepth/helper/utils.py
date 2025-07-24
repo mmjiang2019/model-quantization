@@ -14,6 +14,8 @@ def plot_matrix(tensor, ax, title, vmin=0, vmax=1, cmap=None):
     ax.set_yticklabels([])
     ax.set_xticklabels([])
 
+def quantization_error(tensor, dequantized_tensor):
+    return (dequantized_tensor - tensor).abs().square().mean()
 
 def plot_quantization_errors(original_tensor, quantized_tensor, dequantized_tensor, dtype = torch.int8, n_bits = 8):
     """
