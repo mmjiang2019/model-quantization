@@ -17,13 +17,16 @@ def plot_matrix(tensor, ax, title, vmin=0, vmax=1, cmap=None):
 def quantization_error(tensor, dequantized_tensor):
     return (dequantized_tensor - tensor).abs().square().mean()
 
-def plot_quantization_errors(original_tensor, quantized_tensor, dequantized_tensor, dtype = torch.int8, n_bits = 8):
+def plot_quantization_errors(name: str, original_tensor, quantized_tensor, dequantized_tensor, dtype = torch.int8, n_bits = 8, show: bool = True):
     """
     A method that plots 4 matrices, the original tensor, the quantized tensor
     the de-quantized tensor and the error tensor.
     """
     # Get a figure of 4 plots
     fig, axes = plt.subplots(1, 4, figsize=(15, 4))
+    
+    if name:
+        fig.suptitle(name)
 
     # Plot the first matrix
     plot_matrix(original_tensor, axes[0], 'Original Tensor', cmap=ListedColormap(['white']))
@@ -40,4 +43,5 @@ def plot_quantization_errors(original_tensor, quantized_tensor, dequantized_tens
     plot_matrix(q_error_tensor, axes[3], 'Quantization Error Tensor', cmap=ListedColormap(['white']))
 
     fig.tight_layout()
-    plt.show()
+    if show:
+        plt.show()

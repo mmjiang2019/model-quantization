@@ -1,6 +1,6 @@
 import torch
 
-from random_quantize_and_dequantize import (
+from model_quantize_and_dequantize.Deepth.Quantize_and_Dequantize.random_quantize_and_dequantize import (
     linear_quantize_with_scale_and_zero_point,
     linear_dequantize_with_scale_and_zero_point
     )
@@ -73,5 +73,5 @@ if __name__ == '__main__':
     
     print(f"(dequantized_tensor-test_tensor).square().mean(): {(dequantized_tensor-test_tensor).square().mean()}")
 
-    plot_quantization_errors(test_tensor, quantized_tensor, 
+    plot_quantization_errors("asynmmetric_linear_quantization", test_tensor, quantized_tensor, 
                         dequantized_tensor)

@@ -1,6 +1,6 @@
 import torch
 
-from random_quantize_and_dequantize import (
+from model_quantize_and_dequantize.Deepth.Quantize_and_Dequantize.random_quantize_and_dequantize import (
     linear_quantize_with_scale_and_zero_point,
     linear_dequantize_with_scale_and_zero_point
     )
@@ -51,18 +51,25 @@ def linear_quantize_symmetric(tensor, dtype=torch.int8):
     
     return quantized_tensor, scale
 
+def linear_dequantize_symmetric(tensor, scale):
+    return linear_dequantize_with_scale_and_zero_point(
+        tensor,
+        scale=scale,
+        zero_point=0
+    )
+
 if __name__ == '__main__':
     test_tensor=torch.randn((4, 4))
 
     quantized_tensor, scale = linear_quantize_symmetric(test_tensor)
     print(f"symmetric scale: {scale}")
 
-    dequantized_tensor = linear_dequantize_with_scale_and_zero_point(
+    dequantized_tensor = linear_dequantize_symmetric(
         quantized_tensor,
-        scale, 
-        0)
+        scale
+        )
     
     print(f"""Quantization Error : \n{quantization_error(test_tensor, dequantized_tensor)}""")
 
-    plot_quantization_errors(test_tensor, quantized_tensor, 
+    plot_quantization_errors("synmmetric_linear_quantization", test_tensor, quantized_tensor, 
                         dequantized_tensor)

@@ -58,6 +58,6 @@ if __name__ == "__main__":
     print(f"Quantization error square:\n{(dequantized_tensor - test_tensor).square()}")
     print(f"Quantization error square mean:\n{(dequantized_tensor - test_tensor).square().mean()}")
 
-    plot_quantization_errors(test_tensor, quantized_tensor,
+    plot_quantization_errors("random_linear_quantization", test_tensor, quantized_tensor,
                          dequantized_tensor)
     
