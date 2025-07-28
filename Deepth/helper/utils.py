@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import torch
 
+# colors for visualization
+COLORS = [[0.000, 0.447, 0.741], [0.850, 0.325, 0.098], [0.929, 0.694, 0.125],
+          [0.494, 0.184, 0.556], [0.466, 0.674, 0.188], [0.301, 0.745, 0.933]]
+
 def plot_matrix(tensor, ax, title, vmin=0, vmax=1, cmap=None):
     """
     Plot a heatmap of tensors using seaborn
@@ -43,5 +47,24 @@ def plot_quantization_errors(name: str, original_tensor, quantized_tensor, dequa
     plot_matrix(q_error_tensor, axes[3], 'Quantization Error Tensor', cmap=ListedColormap(['white']))
 
     fig.tight_layout()
+    if show:
+        plt.show()
+
+def plot_results(name, model, pil_img, results, show:bool=True):
+    fig = plt.figure(figsize=(16,10))
+    plt.imshow(pil_img)
+    ax = plt.gca()
+    if name:
+        fig.suptitle(name)
+        # ax.set_title(name)
+    scores, labels, boxes = results["scores"], results["labels"], results["boxes"]
+    colors = COLORS * 100
+    for score, label, (xmin, ymin, xmax, ymax),c  in zip(scores.tolist(), labels.tolist(), boxes.tolist(), colors):
+        ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
+                                   fill=False, color=c, linewidth=3))
+        text = f'{model.config.id2label[label]}: {score:0.2f}'
+        ax.text(xmin, ymin, text, fontsize=15,
+                bbox=dict(facecolor='yellow', alpha=0.5))
+    plt.axis('off')
     if show:
         plt.show()
